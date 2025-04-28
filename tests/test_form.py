@@ -1,6 +1,7 @@
 import pytest
-from playwright.sync_api import Page, expect, sync_playwright
-import time
+from playwright.sync_api import Page, expect
+
+
 @pytest.mark.form
 def test_form(page: Page) -> None:
 
@@ -20,7 +21,6 @@ def test_form(page: Page) -> None:
     page.on("request", lambda request: print(f"➡ Запрос: {request.method} {request.url}"))
     page.on("response", lambda response: print(f"⬅ Ответ: {response.status} {response.url}"))
 
-    # Ожидаем ответ после клика
     with page.expect_response("https://example.com/api/subscribe") as response_info:
         page.get_by_role("button", name="Request A Quote").click()
 
@@ -32,7 +32,6 @@ def test_form(page: Page) -> None:
     print(f"Ответ пришёл с URL: {response.url}")
     print(f"Статус ответа: {response.status}")
 
-    # Проверка статуса ответа
     assert response.status == 200, f"Ошибка статус код: {response.status}"
 
     try:
